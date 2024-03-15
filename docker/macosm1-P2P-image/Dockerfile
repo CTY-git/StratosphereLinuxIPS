@@ -72,5 +72,9 @@ RUN npm install
 # Switch to Slips installation dir when login.
 WORKDIR ${SLIPS_DIR}
 
-#CMD redis-server --daemonize yes && /bin/bash
-CMD /bin/bash
+# Create a non-root user to run the service
+RUN useradd -m -s /bin/bash slipsuser
+RUN chown -R slipsuser:slipsuser ${SLIPS_DIR}
+USER slipsuser
+
+CMD redis-server --daemonize yes && /bin/bash
