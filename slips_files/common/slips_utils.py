@@ -256,7 +256,6 @@ class Utils(object):
 
     def to_delta(self, time_in_seconds):
         return timedelta(seconds=int(time_in_seconds))
-
     def get_own_IPs(self) -> list:
         """
         Returns a list of our local and public IPs
@@ -279,7 +278,7 @@ class Utils(object):
 
         try:
             response = requests.get(
-                'http://ipinfo.io/json',
+                'https://ipinfo.io/json',
                 timeout=5,
             )
         except (
@@ -300,6 +299,7 @@ class Utils(object):
         public_ip = response['ip']
         IPs.append(public_ip)
         return IPs
+
 
     def convert_to_mb(self, bytes):
         return int(bytes)/(10**6)
