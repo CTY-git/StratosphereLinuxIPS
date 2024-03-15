@@ -1,4 +1,5 @@
 from slips_files.common.imports import *
+import urllib.parse
 import json
 import urllib
 import requests
@@ -249,25 +250,24 @@ class HTTPAnalyzer(Module, multiprocessing.Process):
                     )
 
                     return True
-
+    
     def get_ua_info_online(self, user_agent):
         """
-        Get OS and browser info about a use agent from an online database http://useragentstring.com
+        Get OS and browser info about a use agent from an online database https://useragentstring.com
         """
-        url = 'http://useragentstring.com/'
+        url = 'https://useragentstring.com/'
         params = {
             'uas': user_agent,
             'getJSON':'all'
         }
         params = urllib.parse.urlencode(params, quote_via=urllib.parse.quote)
         try:
-
-            response = requests.get(url, params=params, timeout=5)
+            response = requests.get(url, params=params, timeout=5, verify=True)
             if response.status_code != 200 or not response.text:
                 raise requests.exceptions.ConnectionError
         except requests.exceptions.ConnectionError:
             return False
-
+    
         # returns the following
         # {"agent_type":"Browser","agent_name":"Internet Explorer","agent_version":"8.0",
         # "os_type":"Windows","os_name":"Windows 7","os_versionName":"","os_versionNumber":"",

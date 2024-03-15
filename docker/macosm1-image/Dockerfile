@@ -68,5 +68,5 @@ RUN npm install
 # Switch to Slips installation dir when login.
 WORKDIR ${SLIPS_DIR}
 
-#CMD redis-server --daemonize yes && /bin/bash
-CMD /bin/bash
+# Start redis-server as a service and run bash in a non-privileged mode
+CMD service redis-server start && exec su -s /bin/bash -c "/bin/bash" nobody

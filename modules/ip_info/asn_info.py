@@ -132,7 +132,7 @@ class ASN:
         if utils.is_ignored_ip(ip):
             return asn
 
-        url = 'http://ip-api.com/json/'
+        url = 'https://ip-api.com/json/'  # Changed to HTTPS
         try:
             response = requests.get(f'{url}/{ip}', timeout=5)
             if response.status_code != 200:
@@ -165,6 +165,7 @@ class ASN:
             pass
 
         return asn
+
 
     def update_ip_info(self, ip, cached_ip_info, asn):
         """
