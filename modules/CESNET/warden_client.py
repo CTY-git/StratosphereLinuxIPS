@@ -279,13 +279,23 @@ class Client(object):
         return err
 
     def connect(self):
+        import ssl
 
         try:
             if self.url.scheme == 'https':
+                context = ssl.create_default_context(ssl.Purpose.SERVER_AUTH)
+                context.check_hostname = True
+                context.verify_mode = ssl.CERT_REQUIRED
+                if self.cafile:
+                    context.load_verify_locations(self.cafile)
+                if self.keyfile and self.certfile:
+                    context.load_cert_chain(certfile=self.certfile, keyfile=self.keyfile)
+                if self.ciphers:
+                    context.set_ciphers(self.ciphers)
+
                 conn = http.client.HTTPSConnection(
                     self.url.netloc,
-                    key_file=self.keyfile,
-                    cert_file=self.certfile,
+                    context=context,
                     timeout=self.timeout,
                 )
             elif self.url.scheme == 'http':
@@ -311,6 +321,7 @@ class Client(object):
             )
 
         return conn
+
 
     def sendRequest(self, func='', payload=None, **kwargs):
 
