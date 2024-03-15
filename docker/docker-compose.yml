@@ -6,8 +6,13 @@ services:
                 cap_add:
                   - NET_ADMIN
                 volumes:
-                  - $PWD/config:/StratosphereLinuxIPS/config/
-                  - $PWD/dataset:/StratosphereLinuxIPS/dataset/
+                  - type: bind
+                    source: ./config
+                    target: /StratosphereLinuxIPS/config/
+                    read_only: true
+                  - type: bind
+                    source: ./dataset
+                    target: /StratosphereLinuxIPS/dataset/
+                    read_only: true
                 network_mode: "host"
                 entrypoint: ["/bin/bash"]
-               
