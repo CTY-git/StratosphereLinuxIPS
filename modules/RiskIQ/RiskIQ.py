@@ -50,7 +50,7 @@ class RiskIQ(Module, multiprocessing.Process):
                 'https://api.riskiq.net/pt/v2/dns/passive',
                 params=params,
                 timeout=5,
-                verify=False,
+                verify=True,  # Changed from False to True to enable certificate validation
                 auth=HTTPBasicAuth(self.riskiq_email, self.riskiq_key)
             )
         except (requests.exceptions.ConnectionError,
