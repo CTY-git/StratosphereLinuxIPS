@@ -168,10 +168,9 @@ class SQLiteDB():
                         }
                     json.dump(json_labeled_flow, json_file)
                     json_file.write('\n')
-
     def get_columns(self, table) -> list:
         """returns a list with column names in the given table"""
-        self.execute(f"PRAGMA table_info({table})")
+        self.execute("PRAGMA table_info(?)", (table,))
         columns = self.fetchall()
         return [column[1] for column in columns]
 
