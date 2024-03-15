@@ -6,7 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Blocking module requirement to avoid using sudo
 ENV IS_IN_A_DOCKER_CONTAINER True
 
-# destionation dir for slips inside the container
+# destination dir for slips inside the container
 ENV SLIPS_DIR /StratosphereLinuxIPS
 
 # Install wget and add Zeek repository to our sources.
@@ -62,4 +62,14 @@ RUN npm install
 # Switch to Slips installation dir when login.
 WORKDIR ${SLIPS_DIR}
 
-CMD redis-server --daemonize yes && /bin/bash
+# Create a dedicated user to run the service
+RUN useradd -m -d /home/slipsuser slipsuser
+
+# Change ownership of the SLIPS_DIR to the slipsuser
+RUN chown -R slipsuser:slipsuser ${SLIPS_DIR}
+
+# Change to non-root user
+USER slipsuser
+
+# Start the redis-server without daemonizing
+CMD ["redis-server", "--protected-mode", "no"]
